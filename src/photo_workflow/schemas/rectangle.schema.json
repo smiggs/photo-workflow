@@ -1,0 +1,37 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "height_px": {
+      "exclusiveMinimum": 0,
+      "title": "Height Px",
+      "type": "number"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "width_px": {
+      "exclusiveMinimum": 0,
+      "title": "Width Px",
+      "type": "number"
+    },
+    "x_px": {
+      "default": 0,
+      "title": "X Px",
+      "type": "number"
+    },
+    "y_px": {
+      "default": 0,
+      "title": "Y Px",
+      "type": "number"
+    }
+  },
+  "required": [
+    "width_px",
+    "height_px"
+  ],
+  "title": "Rectangle",
+  "type": "object"
+}

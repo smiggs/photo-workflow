@@ -1,0 +1,293 @@
+{
+  "$defs": {
+    "ApprovalRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "checkpoint": {
+          "title": "Checkpoint",
+          "type": "string"
+        },
+        "decision": {
+          "enum": [
+            "approved",
+            "rejected"
+          ],
+          "title": "Decision",
+          "type": "string"
+        },
+        "input_hashes": {
+          "additionalProperties": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "minProperties": 1,
+          "title": "Input Hashes",
+          "type": "object"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "reviewer": {
+          "minLength": 1,
+          "title": "Reviewer",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "timestamp_utc": {
+          "format": "date-time",
+          "title": "Timestamp Utc",
+          "type": "string"
+        }
+      },
+      "required": [
+        "checkpoint",
+        "reviewer",
+        "decision",
+        "timestamp_utc",
+        "input_hashes",
+        "reason"
+      ],
+      "title": "ApprovalRecord",
+      "type": "object"
+    },
+    "Issue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "relative_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Relative Path"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "severity": {
+          "default": "warning",
+          "enum": [
+            "warning",
+            "error"
+          ],
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "Issue",
+      "type": "object"
+    },
+    "StageResult": {
+      "additionalProperties": false,
+      "properties": {
+        "artefacts": {
+          "additionalProperties": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "title": "Artefacts",
+          "type": "object"
+        },
+        "counts": {
+          "additionalProperties": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Counts",
+          "type": "object"
+        },
+        "fingerprint_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Fingerprint Sha256",
+          "type": "string"
+        },
+        "issues": {
+          "items": {
+            "$ref": "#/$defs/Issue"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "stage": {
+          "title": "Stage",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/StageState"
+        },
+        "upstream_ids": {
+          "items": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "title": "Upstream Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "stage",
+        "fingerprint_sha256",
+        "state",
+        "artefacts"
+      ],
+      "title": "StageResult",
+      "type": "object"
+    },
+    "StageState": {
+      "enum": [
+        "complete",
+        "partial",
+        "awaiting_approval",
+        "failed"
+      ],
+      "title": "StageState",
+      "type": "string"
+    },
+    "ToolVersion": {
+      "additionalProperties": false,
+      "properties": {
+        "available": {
+          "title": "Available",
+          "type": "boolean"
+        },
+        "executable_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Executable Path"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "native_versions": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Native Versions",
+          "type": "object"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        }
+      },
+      "required": [
+        "name",
+        "available"
+      ],
+      "title": "ToolVersion",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "approvals": {
+      "items": {
+        "$ref": "#/$defs/ApprovalRecord"
+      },
+      "title": "Approvals",
+      "type": "array"
+    },
+    "configuration_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Configuration Sha256",
+      "type": "string"
+    },
+    "hash_algorithm": {
+      "const": "sha256",
+      "default": "sha256",
+      "title": "Hash Algorithm",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "source_root": {
+      "title": "Source Root",
+      "type": "string"
+    },
+    "stages": {
+      "additionalProperties": {
+        "$ref": "#/$defs/StageResult"
+      },
+      "title": "Stages",
+      "type": "object"
+    },
+    "tools": {
+      "items": {
+        "$ref": "#/$defs/ToolVersion"
+      },
+      "title": "Tools",
+      "type": "array"
+    }
+  },
+  "required": [
+    "run_id",
+    "source_root",
+    "configuration_sha256",
+    "tools"
+  ],
+  "title": "RunManifest",
+  "type": "object"
+}

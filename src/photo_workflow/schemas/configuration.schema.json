@@ -1,0 +1,46 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "raw_extensions": {
+      "default": [
+        ".arw",
+        ".cr2",
+        ".cr3",
+        ".dng",
+        ".nef",
+        ".orf",
+        ".pef",
+        ".raf",
+        ".rw2",
+        ".srw"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "title": "Raw Extensions",
+      "type": "array"
+    },
+    "representatives_per_cohort": {
+      "default": 1,
+      "maximum": 100,
+      "minimum": 1,
+      "title": "Representatives Per Cohort",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "tool_timeout_seconds": {
+      "default": 30,
+      "exclusiveMinimum": 0,
+      "maximum": 600,
+      "title": "Tool Timeout Seconds",
+      "type": "number"
+    }
+  },
+  "title": "Configuration",
+  "type": "object"
+}

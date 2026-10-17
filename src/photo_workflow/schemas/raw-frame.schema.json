@@ -1,0 +1,371 @@
+{
+  "$defs": {
+    "CaptureMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "body_serial": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Body Serial"
+        },
+        "captured_at_local": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Captured At Local"
+        },
+        "captured_at_utc": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Captured At Utc"
+        },
+        "lens": {
+          "$ref": "#/$defs/LensState"
+        },
+        "make": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Make"
+        },
+        "model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model"
+        },
+        "orientation": {
+          "anyOf": [
+            {
+              "maximum": 8,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Orientation"
+        },
+        "readout_mode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Readout Mode"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "source_fields": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "items": {},
+                "type": "array"
+              }
+            ]
+          },
+          "title": "Source Fields",
+          "type": "object"
+        }
+      },
+      "title": "CaptureMetadata",
+      "type": "object"
+    },
+    "ImageGeometry": {
+      "additionalProperties": false,
+      "properties": {
+        "active_area": {
+          "$ref": "#/$defs/Rectangle"
+        },
+        "cfa_pattern": {
+          "anyOf": [
+            {
+              "items": {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cfa Pattern"
+        },
+        "colour_description": {
+          "title": "Colour Description",
+          "type": "string"
+        },
+        "decoder_flip": {
+          "title": "Decoder Flip",
+          "type": "integer"
+        },
+        "raw_height_px": {
+          "exclusiveMinimum": 0,
+          "title": "Raw Height Px",
+          "type": "integer"
+        },
+        "raw_width_px": {
+          "exclusiveMinimum": 0,
+          "title": "Raw Width Px",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "raw_width_px",
+        "raw_height_px",
+        "active_area",
+        "colour_description",
+        "decoder_flip"
+      ],
+      "title": "ImageGeometry",
+      "type": "object"
+    },
+    "LensState": {
+      "additionalProperties": false,
+      "properties": {
+        "aperture_f_number": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aperture F Number"
+        },
+        "focal_length_mm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Focal Length Mm"
+        },
+        "focus_distance_m": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Focus Distance M"
+        },
+        "lens": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lens"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "title": "LensState",
+      "type": "object"
+    },
+    "Rectangle": {
+      "additionalProperties": false,
+      "properties": {
+        "height_px": {
+          "exclusiveMinimum": 0,
+          "title": "Height Px",
+          "type": "number"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "width_px": {
+          "exclusiveMinimum": 0,
+          "title": "Width Px",
+          "type": "number"
+        },
+        "x_px": {
+          "default": 0,
+          "title": "X Px",
+          "type": "number"
+        },
+        "y_px": {
+          "default": 0,
+          "title": "Y Px",
+          "type": "number"
+        }
+      },
+      "required": [
+        "width_px",
+        "height_px"
+      ],
+      "title": "Rectangle",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cohort_id": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cohort Id"
+    },
+    "content_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Sha256",
+      "type": "string"
+    },
+    "exclusion_reasons": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Exclusion Reasons",
+      "type": "array"
+    },
+    "frame_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Frame Id",
+      "type": "string"
+    },
+    "geometry": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImageGeometry"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "metadata": {
+      "$ref": "#/$defs/CaptureMetadata"
+    },
+    "relative_paths": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Relative Paths",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "size_bytes": {
+      "minimum": 0,
+      "title": "Size Bytes",
+      "type": "integer"
+    },
+    "status": {
+      "default": "unreviewed",
+      "enum": [
+        "unreviewed",
+        "excluded"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "frame_id",
+    "content_sha256",
+    "relative_paths",
+    "size_bytes"
+  ],
+  "title": "RawFrame",
+  "type": "object"
+}

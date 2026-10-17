@@ -1,0 +1,57 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "checkpoint": {
+      "title": "Checkpoint",
+      "type": "string"
+    },
+    "decision": {
+      "enum": [
+        "approved",
+        "rejected"
+      ],
+      "title": "Decision",
+      "type": "string"
+    },
+    "input_hashes": {
+      "additionalProperties": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "minProperties": 1,
+      "title": "Input Hashes",
+      "type": "object"
+    },
+    "reason": {
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "reviewer": {
+      "minLength": 1,
+      "title": "Reviewer",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "timestamp_utc": {
+      "format": "date-time",
+      "title": "Timestamp Utc",
+      "type": "string"
+    }
+  },
+  "required": [
+    "checkpoint",
+    "reviewer",
+    "decision",
+    "timestamp_utc",
+    "input_hashes",
+    "reason"
+  ],
+  "title": "ApprovalRecord",
+  "type": "object"
+}

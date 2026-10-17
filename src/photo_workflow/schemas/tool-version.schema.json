@@ -1,0 +1,56 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "available": {
+      "title": "Available",
+      "type": "boolean"
+    },
+    "executable_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Executable Path"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "native_versions": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Native Versions",
+      "type": "object"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Version"
+    }
+  },
+  "required": [
+    "name",
+    "available"
+  ],
+  "title": "ToolVersion",
+  "type": "object"
+}

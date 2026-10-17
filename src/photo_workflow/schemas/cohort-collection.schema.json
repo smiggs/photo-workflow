@@ -1,0 +1,68 @@
+{
+  "$defs": {
+    "Cohort": {
+      "additionalProperties": false,
+      "properties": {
+        "cohort_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Cohort Id",
+          "type": "string"
+        },
+        "compatibility_facts": {
+          "additionalProperties": true,
+          "title": "Compatibility Facts",
+          "type": "object"
+        },
+        "frame_ids": {
+          "items": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Frame Ids",
+          "type": "array"
+        },
+        "review_status": {
+          "const": "unreviewed",
+          "default": "unreviewed",
+          "title": "Review Status",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "cohort_id",
+        "frame_ids",
+        "compatibility_facts"
+      ],
+      "title": "Cohort",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cohorts": {
+      "items": {
+        "$ref": "#/$defs/Cohort"
+      },
+      "title": "Cohorts",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "cohorts"
+  ],
+  "title": "CohortCollection",
+  "type": "object"
+}

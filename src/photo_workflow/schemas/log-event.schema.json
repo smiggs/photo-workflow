@@ -1,0 +1,54 @@
+{
+  "$defs": {
+    "StageState": {
+      "enum": [
+        "complete",
+        "partial",
+        "awaiting_approval",
+        "failed"
+      ],
+      "title": "StageState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "event": {
+      "const": "stage_committed",
+      "default": "stage_committed",
+      "title": "Event",
+      "type": "string"
+    },
+    "fingerprint_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Fingerprint Sha256",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "stage": {
+      "title": "Stage",
+      "type": "string"
+    },
+    "state": {
+      "$ref": "#/$defs/StageState"
+    },
+    "timestamp_utc": {
+      "format": "date-time",
+      "title": "Timestamp Utc",
+      "type": "string"
+    }
+  },
+  "required": [
+    "timestamp_utc",
+    "stage",
+    "state",
+    "fingerprint_sha256"
+  ],
+  "title": "LogEvent",
+  "type": "object"
+}

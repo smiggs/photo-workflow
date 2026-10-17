@@ -1,0 +1,202 @@
+{
+  "$defs": {
+    "CoordinateSpace": {
+      "enum": [
+        "raw_sensor",
+        "active_sensor",
+        "decoded_detection",
+        "darktable_input",
+        "final_export",
+        "preview"
+      ],
+      "title": "CoordinateSpace",
+      "type": "string"
+    },
+    "Rectangle": {
+      "additionalProperties": false,
+      "properties": {
+        "height_px": {
+          "exclusiveMinimum": 0,
+          "title": "Height Px",
+          "type": "number"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "width_px": {
+          "exclusiveMinimum": 0,
+          "title": "Width Px",
+          "type": "number"
+        },
+        "x_px": {
+          "default": 0,
+          "title": "X Px",
+          "type": "number"
+        },
+        "y_px": {
+          "default": 0,
+          "title": "Y Px",
+          "type": "number"
+        }
+      },
+      "required": [
+        "width_px",
+        "height_px"
+      ],
+      "title": "Rectangle",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": {
+      "const": "1",
+      "default": "1",
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "implementation": {
+      "const": "photo_workflow.coordinates.v1",
+      "default": "photo_workflow.coordinates.v1",
+      "title": "Implementation",
+      "type": "string"
+    },
+    "inverse_available": {
+      "default": true,
+      "title": "Inverse Available",
+      "type": "boolean"
+    },
+    "kind": {
+      "default": "homography",
+      "enum": [
+        "homography",
+        "unsupported"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "mask_resampling": {
+      "const": "nearest",
+      "default": "nearest",
+      "title": "Mask Resampling",
+      "type": "string"
+    },
+    "matrix": {
+      "anyOf": [
+        {
+          "maxItems": 3,
+          "minItems": 3,
+          "prefixItems": [
+            {
+              "maxItems": 3,
+              "minItems": 3,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "maxItems": 3,
+              "minItems": 3,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "maxItems": 3,
+              "minItems": 3,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            }
+          ],
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Matrix"
+    },
+    "max_error_px": {
+      "default": 1e-06,
+      "minimum": 0,
+      "title": "Max Error Px",
+      "type": "number"
+    },
+    "rounding": {
+      "const": "nearest_half_up",
+      "default": "nearest_half_up",
+      "title": "Rounding",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "source_domain": {
+      "$ref": "#/$defs/Rectangle"
+    },
+    "source_space": {
+      "$ref": "#/$defs/CoordinateSpace"
+    },
+    "target_domain": {
+      "$ref": "#/$defs/Rectangle"
+    },
+    "target_space": {
+      "$ref": "#/$defs/CoordinateSpace"
+    },
+    "unsupported_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Unsupported Reason"
+    }
+  },
+  "required": [
+    "source_space",
+    "target_space",
+    "source_domain",
+    "target_domain"
+  ],
+  "title": "CoordinateTransform",
+  "type": "object"
+}

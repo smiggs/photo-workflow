@@ -1,0 +1,120 @@
+{
+  "$defs": {
+    "Issue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "relative_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Relative Path"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "severity": {
+          "default": "warning",
+          "enum": [
+            "warning",
+            "error"
+          ],
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "Issue",
+      "type": "object"
+    },
+    "StageState": {
+      "enum": [
+        "complete",
+        "partial",
+        "awaiting_approval",
+        "failed"
+      ],
+      "title": "StageState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artefacts": {
+      "additionalProperties": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "title": "Artefacts",
+      "type": "object"
+    },
+    "counts": {
+      "additionalProperties": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "title": "Counts",
+      "type": "object"
+    },
+    "fingerprint_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Fingerprint Sha256",
+      "type": "string"
+    },
+    "issues": {
+      "items": {
+        "$ref": "#/$defs/Issue"
+      },
+      "title": "Issues",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "stage": {
+      "title": "Stage",
+      "type": "string"
+    },
+    "state": {
+      "$ref": "#/$defs/StageState"
+    },
+    "upstream_ids": {
+      "items": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "title": "Upstream Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "stage",
+    "fingerprint_sha256",
+    "state",
+    "artefacts"
+  ],
+  "title": "StageResult",
+  "type": "object"
+}

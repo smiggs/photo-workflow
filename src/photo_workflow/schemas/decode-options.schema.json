@@ -1,0 +1,73 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "adapter": {
+      "const": "rawpy.raw_image_visible",
+      "default": "rawpy.raw_image_visible",
+      "title": "Adapter",
+      "type": "string"
+    },
+    "automatic_brightness": {
+      "const": false,
+      "default": false,
+      "title": "Automatic Brightness",
+      "type": "boolean"
+    },
+    "black_subtraction": {
+      "const": false,
+      "default": false,
+      "title": "Black Subtraction",
+      "type": "boolean"
+    },
+    "demosaicing": {
+      "const": false,
+      "default": false,
+      "title": "Demosaicing",
+      "type": "boolean"
+    },
+    "domain": {
+      "const": "camera_native_sensor_samples",
+      "default": "camera_native_sensor_samples",
+      "title": "Domain",
+      "type": "string"
+    },
+    "gamma": {
+      "const": false,
+      "default": false,
+      "title": "Gamma",
+      "type": "boolean"
+    },
+    "orientation_applied_to_samples": {
+      "const": false,
+      "default": false,
+      "title": "Orientation Applied To Samples",
+      "type": "boolean"
+    },
+    "postprocess": {
+      "const": false,
+      "default": false,
+      "title": "Postprocess",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "shot_select": {
+      "const": 0,
+      "default": 0,
+      "title": "Shot Select",
+      "type": "integer"
+    },
+    "white_balance": {
+      "const": false,
+      "default": false,
+      "title": "White Balance",
+      "type": "boolean"
+    }
+  },
+  "title": "DecodeOptions",
+  "type": "object"
+}

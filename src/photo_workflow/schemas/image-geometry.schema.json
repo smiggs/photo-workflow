@@ -1,0 +1,98 @@
+{
+  "$defs": {
+    "Rectangle": {
+      "additionalProperties": false,
+      "properties": {
+        "height_px": {
+          "exclusiveMinimum": 0,
+          "title": "Height Px",
+          "type": "number"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "width_px": {
+          "exclusiveMinimum": 0,
+          "title": "Width Px",
+          "type": "number"
+        },
+        "x_px": {
+          "default": 0,
+          "title": "X Px",
+          "type": "number"
+        },
+        "y_px": {
+          "default": 0,
+          "title": "Y Px",
+          "type": "number"
+        }
+      },
+      "required": [
+        "width_px",
+        "height_px"
+      ],
+      "title": "Rectangle",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "active_area": {
+      "$ref": "#/$defs/Rectangle"
+    },
+    "cfa_pattern": {
+      "anyOf": [
+        {
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cfa Pattern"
+    },
+    "colour_description": {
+      "title": "Colour Description",
+      "type": "string"
+    },
+    "decoder_flip": {
+      "title": "Decoder Flip",
+      "type": "integer"
+    },
+    "raw_height_px": {
+      "exclusiveMinimum": 0,
+      "title": "Raw Height Px",
+      "type": "integer"
+    },
+    "raw_width_px": {
+      "exclusiveMinimum": 0,
+      "title": "Raw Width Px",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "raw_width_px",
+    "raw_height_px",
+    "active_area",
+    "colour_description",
+    "decoder_flip"
+  ],
+  "title": "ImageGeometry",
+  "type": "object"
+}

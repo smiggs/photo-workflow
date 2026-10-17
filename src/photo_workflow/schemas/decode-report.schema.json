@@ -1,0 +1,556 @@
+{
+  "$defs": {
+    "CoordinateSpace": {
+      "enum": [
+        "raw_sensor",
+        "active_sensor",
+        "decoded_detection",
+        "darktable_input",
+        "final_export",
+        "preview"
+      ],
+      "title": "CoordinateSpace",
+      "type": "string"
+    },
+    "CoordinateTransform": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "const": "1",
+          "default": "1",
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "implementation": {
+          "const": "photo_workflow.coordinates.v1",
+          "default": "photo_workflow.coordinates.v1",
+          "title": "Implementation",
+          "type": "string"
+        },
+        "inverse_available": {
+          "default": true,
+          "title": "Inverse Available",
+          "type": "boolean"
+        },
+        "kind": {
+          "default": "homography",
+          "enum": [
+            "homography",
+            "unsupported"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "mask_resampling": {
+          "const": "nearest",
+          "default": "nearest",
+          "title": "Mask Resampling",
+          "type": "string"
+        },
+        "matrix": {
+          "anyOf": [
+            {
+              "maxItems": 3,
+              "minItems": 3,
+              "prefixItems": [
+                {
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "type": "array"
+                },
+                {
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "type": "array"
+                },
+                {
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Matrix"
+        },
+        "max_error_px": {
+          "default": 1e-06,
+          "minimum": 0,
+          "title": "Max Error Px",
+          "type": "number"
+        },
+        "rounding": {
+          "const": "nearest_half_up",
+          "default": "nearest_half_up",
+          "title": "Rounding",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "source_domain": {
+          "$ref": "#/$defs/Rectangle"
+        },
+        "source_space": {
+          "$ref": "#/$defs/CoordinateSpace"
+        },
+        "target_domain": {
+          "$ref": "#/$defs/Rectangle"
+        },
+        "target_space": {
+          "$ref": "#/$defs/CoordinateSpace"
+        },
+        "unsupported_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unsupported Reason"
+        }
+      },
+      "required": [
+        "source_space",
+        "target_space",
+        "source_domain",
+        "target_domain"
+      ],
+      "title": "CoordinateTransform",
+      "type": "object"
+    },
+    "DecodeOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter": {
+          "const": "rawpy.raw_image_visible",
+          "default": "rawpy.raw_image_visible",
+          "title": "Adapter",
+          "type": "string"
+        },
+        "automatic_brightness": {
+          "const": false,
+          "default": false,
+          "title": "Automatic Brightness",
+          "type": "boolean"
+        },
+        "black_subtraction": {
+          "const": false,
+          "default": false,
+          "title": "Black Subtraction",
+          "type": "boolean"
+        },
+        "demosaicing": {
+          "const": false,
+          "default": false,
+          "title": "Demosaicing",
+          "type": "boolean"
+        },
+        "domain": {
+          "const": "camera_native_sensor_samples",
+          "default": "camera_native_sensor_samples",
+          "title": "Domain",
+          "type": "string"
+        },
+        "gamma": {
+          "const": false,
+          "default": false,
+          "title": "Gamma",
+          "type": "boolean"
+        },
+        "orientation_applied_to_samples": {
+          "const": false,
+          "default": false,
+          "title": "Orientation Applied To Samples",
+          "type": "boolean"
+        },
+        "postprocess": {
+          "const": false,
+          "default": false,
+          "title": "Postprocess",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "shot_select": {
+          "const": 0,
+          "default": 0,
+          "title": "Shot Select",
+          "type": "integer"
+        },
+        "white_balance": {
+          "const": false,
+          "default": false,
+          "title": "White Balance",
+          "type": "boolean"
+        }
+      },
+      "title": "DecodeOptions",
+      "type": "object"
+    },
+    "DecodedFrame": {
+      "additionalProperties": false,
+      "properties": {
+        "black_level_per_channel": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Black Level Per Channel",
+          "type": "array"
+        },
+        "cfa_dtype": {
+          "const": "uint8",
+          "default": "uint8",
+          "title": "Cfa Dtype",
+          "type": "string"
+        },
+        "cfa_path": {
+          "title": "Cfa Path",
+          "type": "string"
+        },
+        "cfa_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Cfa Sha256",
+          "type": "string"
+        },
+        "coordinate_transforms": {
+          "items": {
+            "$ref": "#/$defs/CoordinateTransform"
+          },
+          "title": "Coordinate Transforms",
+          "type": "array"
+        },
+        "decode_options": {
+          "$ref": "#/$defs/DecodeOptions"
+        },
+        "frame_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Frame Id",
+          "type": "string"
+        },
+        "geometry": {
+          "$ref": "#/$defs/ImageGeometry"
+        },
+        "overlay_path": {
+          "title": "Overlay Path",
+          "type": "string"
+        },
+        "round_trip_max_error_px": {
+          "minimum": 0,
+          "title": "Round Trip Max Error Px",
+          "type": "number"
+        },
+        "samples_dtype": {
+          "const": "uint16",
+          "default": "uint16",
+          "title": "Samples Dtype",
+          "type": "string"
+        },
+        "samples_path": {
+          "title": "Samples Path",
+          "type": "string"
+        },
+        "samples_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Samples Sha256",
+          "type": "string"
+        },
+        "samples_shape": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            }
+          ],
+          "title": "Samples Shape",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "unsupported_spaces": {
+          "items": {
+            "$ref": "#/$defs/CoordinateSpace"
+          },
+          "title": "Unsupported Spaces",
+          "type": "array"
+        },
+        "white_level": {
+          "exclusiveMinimum": 0,
+          "title": "White Level",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "frame_id",
+        "samples_path",
+        "samples_sha256",
+        "samples_shape",
+        "cfa_path",
+        "cfa_sha256",
+        "overlay_path",
+        "geometry",
+        "black_level_per_channel",
+        "white_level",
+        "coordinate_transforms",
+        "round_trip_max_error_px"
+      ],
+      "title": "DecodedFrame",
+      "type": "object"
+    },
+    "ImageGeometry": {
+      "additionalProperties": false,
+      "properties": {
+        "active_area": {
+          "$ref": "#/$defs/Rectangle"
+        },
+        "cfa_pattern": {
+          "anyOf": [
+            {
+              "items": {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cfa Pattern"
+        },
+        "colour_description": {
+          "title": "Colour Description",
+          "type": "string"
+        },
+        "decoder_flip": {
+          "title": "Decoder Flip",
+          "type": "integer"
+        },
+        "raw_height_px": {
+          "exclusiveMinimum": 0,
+          "title": "Raw Height Px",
+          "type": "integer"
+        },
+        "raw_width_px": {
+          "exclusiveMinimum": 0,
+          "title": "Raw Width Px",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "raw_width_px",
+        "raw_height_px",
+        "active_area",
+        "colour_description",
+        "decoder_flip"
+      ],
+      "title": "ImageGeometry",
+      "type": "object"
+    },
+    "Issue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "relative_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Relative Path"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "severity": {
+          "default": "warning",
+          "enum": [
+            "warning",
+            "error"
+          ],
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "Issue",
+      "type": "object"
+    },
+    "Rectangle": {
+      "additionalProperties": false,
+      "properties": {
+        "height_px": {
+          "exclusiveMinimum": 0,
+          "title": "Height Px",
+          "type": "number"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "width_px": {
+          "exclusiveMinimum": 0,
+          "title": "Width Px",
+          "type": "number"
+        },
+        "x_px": {
+          "default": 0,
+          "title": "X Px",
+          "type": "number"
+        },
+        "y_px": {
+          "default": 0,
+          "title": "Y Px",
+          "type": "number"
+        }
+      },
+      "required": [
+        "width_px",
+        "height_px"
+      ],
+      "title": "Rectangle",
+      "type": "object"
+    },
+    "StageState": {
+      "enum": [
+        "complete",
+        "partial",
+        "awaiting_approval",
+        "failed"
+      ],
+      "title": "StageState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "darktable_export_calibration": {
+      "const": "unverified",
+      "default": "unverified",
+      "title": "Darktable Export Calibration",
+      "type": "string"
+    },
+    "frames": {
+      "items": {
+        "$ref": "#/$defs/DecodedFrame"
+      },
+      "title": "Frames",
+      "type": "array"
+    },
+    "inventory_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Inventory Sha256",
+      "type": "string"
+    },
+    "issues": {
+      "items": {
+        "$ref": "#/$defs/Issue"
+      },
+      "title": "Issues",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "state": {
+      "$ref": "#/$defs/StageState"
+    }
+  },
+  "required": [
+    "state",
+    "inventory_sha256",
+    "frames",
+    "issues"
+  ],
+  "title": "DecodeReport",
+  "type": "object"
+}

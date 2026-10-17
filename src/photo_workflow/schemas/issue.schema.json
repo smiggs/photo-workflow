@@ -1,0 +1,46 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "code": {
+      "title": "Code",
+      "type": "string"
+    },
+    "message": {
+      "title": "Message",
+      "type": "string"
+    },
+    "relative_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Relative Path"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "severity": {
+      "default": "warning",
+      "enum": [
+        "warning",
+        "error"
+      ],
+      "title": "Severity",
+      "type": "string"
+    }
+  },
+  "required": [
+    "code",
+    "message"
+  ],
+  "title": "Issue",
+  "type": "object"
+}

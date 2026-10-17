@@ -23,9 +23,9 @@ All commands support `--config`, `--dry-run`, `--log-level` and `--json`.
   minor).
 - Pin `rawpy`, `numpy`, `opencv-python` and `scikit-image`; use Pydantic v2 as
   the model and JSON Schema source, and keep CLI/test dependencies in declared
-  optional groups. Record native library versions at runtime as well as Python
+  dependency groups. Record native library versions at runtime as well as Python
   package versions.
-- Define the console entry point and development/test extras in `pyproject.toml`.
+- Define the console entry point and development/test dependency groups in `pyproject.toml`.
 - Add `CLAUDE.md` containing the safety invariants and links to the root
   workflow and these package plans.
 - Use a single configuration loader with strict unknown-key rejection.
@@ -134,3 +134,18 @@ the inventory and transform hashes.
   coordinate silently becomes an in-bounds repair or review overlay.
 - Missing darktable is reported as a capability limitation, not as a failure of
   inventory or decode checks.
+
+## Implementation status
+
+The first implementation provides the three commands, Python 3.12 packaging and
+lockfile, strict configuration/models and generated schemas, safe stage storage,
+ExifTool/rawpy adapters, duplicate-aware inventory, unreviewed cohorts and native
+sample decode/calibration evidence. Working setup and test commands are in
+[README.md](../../README.md); the supported coordinate scope is documented in
+[coordinate-contract.md](../../docs/coordinate-contract.md).
+
+This package is not released. Nonlinear lens and darktable input/export mappings
+remain explicitly unsupported. Real camera fixtures, full-resolution darktable
+calibration, human review of cohort rules/coordinate evidence and approval
+recording through the later orchestration layer remain outstanding. Synthetic
+fixtures and a real ExifTool/rawpy smoke check are engineering evidence only.
