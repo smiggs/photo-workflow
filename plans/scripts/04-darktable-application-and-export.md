@@ -58,7 +58,11 @@ validate(candidate_sidecar) -> ValidationReport
 The implementation must:
 
 - verify all upstream hashes and the darktable capability signature;
-- transform geometry only through the approved coordinate module;
+- transform geometry only through the approved coordinate module, including
+  full target masks and source extents through supported nonlinear mappings;
+- reject unsupported mappings, excessive error, missing required inverses and
+  invalid repair support; record wholly cropped-out operations as output
+  exclusions rather than clamping coordinates or changing visibility decisions;
 - preserve unrelated existing history and metadata;
 - enforce one owner for each retouch/style operation;
 - reject duplicate active module instances or ambiguous ordering;
@@ -98,7 +102,9 @@ payloads with regular expressions or line-based substitutions.
 - Parser/serializer fixtures from every supported darktable version.
 - Golden semantic diffs rather than brittle whole-file string snapshots.
 - Hostile filenames, read-only originals, corrupt XMP and interrupted export.
-- Coordinate edge cases near borders and after orientation/crop.
+- Coordinate edge cases near borders, after orientation/crop and through
+  supported lens/perspective mappings, including mask/source extent placement,
+  output exclusions and rejection of unsupported or partially clipped support.
 - Integration test that opens generated XMP in darktable and checks a render.
 - A version-mismatch test that refuses to run instead of attempting a best guess.
 

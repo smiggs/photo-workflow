@@ -83,17 +83,33 @@ not drift from the implementation.
   every decoder option.
 - Define named spaces at minimum: raw sensor, active sensor, decoded detection,
   darktable input and final export.
-- Store orientation, crop, scale and offset as an invertible transform chain.
-- Implement point, radius and mask transformations with declared rounding.
-- Produce a calibration overlay showing known synthetic points after a full
-  round trip.
+- Store an ordered transform chain covering orientation, crop, scale, offset,
+  perspective and nonlinear lens mappings used by the selected backend. Record
+  resolved per-frame parameters, implementation/version, valid source and target
+  domains, inverse availability and numerical error bounds.
+- Implement point, extent and mask transformations with declared rounding and
+  resampling. A radius may become a non-circular extent; map the full target and
+  source support rather than applying one scalar radius through distortion.
+- Return explicit outside-output results for cropped-out points or supports;
+  never clamp them to a border. Do not classify a cropped-out defect as
+  `not-visible`, which describes physical visibility. Record output exclusion
+  separately. Reject partially clipped repair support unless the backend has
+  an explicitly validated policy for it.
+- Require inverse mappings only within their validated domains. Block repair
+  application and coordinate-dependent review when a required transform or
+  inverse is unsupported, ambiguous or exceeds its error tolerance.
+- Produce calibration overlays for known synthetic points and masks, including
+  round trips within shared valid domains and direct export comparisons.
 
 ## Tests
 
 - Unit tests for configuration precedence, schema rejection, hashes, atomic
   writes, safe paths and subprocess timeouts.
-- Property tests for coordinate round trips, including rotations, crops and
-  odd dimensions.
+- Property tests for coordinate round trips within shared valid domains,
+  including rotations, crops, odd dimensions and supported nonlinear mappings.
+- Fixtures for perspective/lens distortion, transformed masks/source extents,
+  cropped-out points, partial support clipping and unavailable inverses. Prove
+  unsupported mappings block application and coordinate-dependent review.
 - Integration tests over a tiny fixture set with spaces and Unicode in names,
   duplicated content, missing metadata and one intentionally corrupt file.
 - A failure-injection test proving interruption cannot leave a valid-looking
@@ -111,7 +127,10 @@ the inventory and transform hashes.
 - Repeated inventory runs are deterministic apart from declared timing fields.
 - The original raw tree is byte-for-byte unchanged.
 - Every frame belongs to exactly one reviewed cohort or is explicitly excluded.
-- Synthetic markers return to within the documented tolerance in every tested
-  coordinate path.
+- Synthetic markers return within the documented tolerance on every supported
+  coordinate path's shared valid domain, and masks/source extents agree with
+  full-resolution export calibration for each supported geometric operation.
+- Cropped-out and unsupported mappings have explicit outcomes; no invalid
+  coordinate silently becomes an in-bounds repair or review overlay.
 - Missing darktable is reported as a capability limitation, not as a failure of
   inventory or decode checks.

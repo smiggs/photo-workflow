@@ -106,17 +106,24 @@ system.
 2. Define `(0, 0)` and axis directions for the unrotated visible-raw image.
 3. Decode a linear detection image with automatic brightness, gamma and
    content-dependent settings disabled.
-4. Record every crop, scale, rotation or geometric transform used for previews.
+4. Record every crop, scale, rotation, perspective and nonlinear lens transform
+   used for previews or exports, including resolved per-frame parameters.
 5. Write conversions between raw coordinates, detection images, displayed
-   previews and final exports.
+   previews and final exports. Declare valid domains, inverse availability,
+   rounding and error bounds. Return an explicit outside-output result for
+   cropped-out points; never clamp them. Transform masks and source extents
+   through the full mapping. Unsupported mappings block application and
+   coordinate-dependent review.
 6. Test portrait and landscape metadata, camera crop modes and at least one
    frame with lens correction and crop.
 
 ### Phase 2 exit test
 
-Known synthetic marks round-trip between every supported coordinate system
-within the declared tolerance and land on the same pixels in a darktable
-full-resolution export.
+Known synthetic marks round-trip within the shared valid domain of every
+supported coordinate path and land within the declared tolerance in a darktable
+full-resolution export. Lens/perspective fixtures verify transformed masks and
+source extents. Cropped-out points return outside-output, and unsupported or
+non-invertible mappings fail closed wherever an inverse is required.
 
 ## Phase 3: detector
 
@@ -155,8 +162,10 @@ may require an unsupported claim of perfect detection.
 5. Enforce minimum evidence and minimum stable-window sizes.
 6. Render evidence before and after each proposed boundary.
 7. Require manual confirmation before releasing epoch profiles.
-8. Compare each released profile with previous compatible profiles and record
-   `equivalent_to` or `supersedes` relationships without overwriting anything.
+8. Give each newly reviewed epoch its own immutable profile ID, dates, source
+   evidence and approval. Compare with previous compatible profiles and record
+   `equivalent_to`, `supersedes` or divergence without overwriting anything.
+   Equivalence never transfers approval or extends an earlier epoch.
 
 Create fixtures for one change near the middle, one near an edge, two changes,
 A -> B -> A, and no change.
@@ -209,7 +218,9 @@ The deterministic pipeline must continue to work when this phase is disabled.
 A human approves the data policy, held-out results, exact model and prompt
 bundle, operating thresholds and shadow-run evidence. Property and fault-
 injection tests prove that malformed output, timeouts and API failures cannot
-authorise a repair. Until then, the feature remains disabled.
+authorise a repair or automatically disable an enabled veto. A change to an
+approved deterministic-only policy invalidates dependent plans, approvals and
+outputs before recomputation. Until release, the feature remains disabled.
 
 ## Phase 6: application engine
 

@@ -145,8 +145,14 @@ transform.
 3. Decode detection images with fixed, explicit settings. Disable automatic
    brightness and any content-dependent processing.
 4. Keep defect coordinates in the visible-raw coordinate system. Store any
-   transform used to make previews or exports.
+   transform used to make previews or exports. Include nonlinear lens and
+   perspective mappings where enabled, with valid domains and error bounds.
+   Inverse mappings apply only within their validated domains. Cropped-out
+   points are explicitly outside the output; never clamp them to a border.
 5. Reject or quarantine files whose metadata or geometry is incompatible.
+   Block repair application and coordinate-dependent review for unsupported
+   transforms or excessive mapping error. Transform full masks and source
+   extents rather than assuming a radius remains circular after distortion.
 
 The inventory, decoder version and decoder settings become part of the run
 manifest.
@@ -193,13 +199,19 @@ size and cannot infer a one-frame boundary from a one-frame stack.
 
 ## Stage 4: compare with previous profiles
 
-Compare the new profile with the most recent compatible profile using a
-bijective match. Equality requires no unexplained additions or removals and no
-material change in geometry or measured appearance.
+Compare the new profile with previous compatible profiles using a bijective
+match, starting with the most recent and checking earlier states for recurrence.
+Equality requires no unexplained additions or removals and no material change
+in geometry or measured appearance.
 
-If equivalent, reference the existing profile from the run manifest. If
-different, retain the new immutable profile and record the relationship between
-the two. Never silently replace the earlier file.
+Create a new immutable profile for each newly reviewed epoch, even when its
+defect state is equivalent to an earlier one. Record `equivalent_to` only when
+there are no unexplained additions, removals or material changes; otherwise
+record `supersedes` or a documented divergence relationship. In A -> B -> A, the
+later A has its own profile ID, epoch dates, source evidence and approval, with
+`equivalent_to` pointing to the earlier A. Equivalence does not transfer approval
+or extend the earlier profile's applicability. Reuse an existing profile ID only
+when referencing that same released epoch record. Never replace an earlier file.
 
 ## Stage 5: create per-frame repair plans
 
@@ -226,7 +238,11 @@ metadata. It does not locate the defect.
 
 The model may retain `auto` or downgrade it to `uncertain`; it can never promote
 another state to `auto`. Invalid output, low confidence or service failure must
-fail closed. Development and release criteria are defined in
+fail closed to `uncertain` for affected candidates when the veto is enabled;
+service failure must never disable it automatically. Deterministic-only mode
+requires an explicitly approved operating policy, recorded before processing.
+Changing that mode invalidates dependent plans, approvals and outputs.
+Development and release criteria are defined in
 [`plans/chatgpt-assisted-review-development.md`](plans/chatgpt-assisted-review-development.md).
 
 ## Stage 6: apply repairs

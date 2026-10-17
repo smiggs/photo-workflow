@@ -96,7 +96,14 @@ photo-pipeline resume
   IDs of upstream artefacts.
 - Coordinates are never passed between stages without an explicit coordinate
   space and transform version.
-- A failed or unavailable optional AI service never promotes a repair.
+- A failed or unavailable enabled AI veto leaves affected repairs `uncertain`;
+  it never switches itself off. Deterministic-only mode requires an explicitly
+  approved operating policy; mode changes invalidate dependent artefacts.
+- Each newly reviewed epoch has its own immutable profile and approval, even
+  when linked to an earlier equivalent defect state.
+- Coordinate mappings declare valid domains and nonlinear behaviour. Unsupported
+  mappings block application and coordinate-dependent review; cropped-out
+  points never become border repairs.
 - Human approvals are immutable records; a changed upstream hash invalidates
   the approval.
 - Tests use small distributable fixtures. Private photographs may be referenced

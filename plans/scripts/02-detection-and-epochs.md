@@ -100,12 +100,17 @@ candidate record.
   coordinate-contract version.
 - Perform a bijective defect match using declared coordinate, extent, contrast
   and confidence tolerances.
-- Reuse the prior immutable profile ID only when there are no unexplained
-  additions, removals or material changes.
-- Otherwise write the new profile with `supersedes` or a documented divergence
-  relationship; never overwrite or silently redirect the old profile.
-- Include an A -> B -> A fixture to prove repeated states can reference an
-  earlier equivalent profile.
+- Allocate a new immutable profile ID for each newly reviewed epoch, retaining
+  its own dates, source hashes, evidence and approval.
+- Set `equivalent_to` to a prior profile only when there are no unexplained
+  additions, removals or material changes. Otherwise record `supersedes` or a
+  documented divergence relationship; never overwrite or redirect the old file.
+- Equivalence describes defect-state similarity only. It does not transfer
+  approval or extend an earlier profile's epoch. Reuse a profile ID only for
+  references to that same released epoch record.
+- Include an A -> B -> A fixture with three distinct epoch profile IDs. The later
+  A links to the earlier A through `equivalent_to` and requires its own approval;
+  all earlier dates, evidence and approvals remain unchanged.
 
 ## Tests and evaluation
 
@@ -140,3 +145,5 @@ evidence hashes. Threshold changes invalidate them.
   approval.
 - Boundary ambiguity is represented explicitly and cannot fall through to one
   default profile.
+- Equivalent states retain distinct epoch provenance and approval; the
+  A -> B -> A fixture cannot apply the first A's approval to the later A.

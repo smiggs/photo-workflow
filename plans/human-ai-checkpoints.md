@@ -57,7 +57,9 @@ aperture behaviour, confidence and possible scene-content explanations. The
 human reviews every candidate before the profile becomes immutable.
 
 Rejected candidates remain in the decision record so the same false positive
-can be recognised later.
+can be recognised later. Each newly reviewed epoch receives its own immutable
+profile ID, evidence and approval. An `equivalent_to` relationship records a
+recurring defect state; it never transfers the earlier epoch's approval.
 
 ### 3. Epoch-boundary review
 
@@ -79,6 +81,12 @@ be acceptable.
 The dataset must include difficult negative examples and must be split by
 shoot, not by random crop, to reduce leakage between training/tuning and held-
 out evaluation.
+
+The approved operating policy records whether semantic veto is enabled. An
+outage never disables it: affected candidates become `uncertain` and require
+human review. Switching to deterministic-only processing requires an explicit
+human policy decision and invalidates dependent plans, approvals and outputs
+before recomputation.
 
 ### 5. Batch review
 

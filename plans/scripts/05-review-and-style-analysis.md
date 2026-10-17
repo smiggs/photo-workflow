@@ -27,6 +27,12 @@ Generate a static, portable report whose images remain local to the run:
 - clean control crops and full-frame miss overlays; and
 - links/IDs back to raw, profile, repair plan, sidecar and export hashes.
 
+Render overlays and source/target extents through the approved coordinate chain,
+including supported nonlinear mappings. Show output exclusions separately from
+physical visibility decisions. Block coordinate-dependent packets when a
+required mapping is unsupported or exceeds its error bound; never display a
+clamped or guessed location as evidence.
+
 Queues include `auto_sample`, `manual`, `uncertain`, `ai_veto`,
 `boundary_review`, `miss_check` and `failed_validation`. Sampling must be seeded
 and recorded so it is reproducible.

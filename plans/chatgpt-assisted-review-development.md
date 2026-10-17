@@ -24,7 +24,10 @@ is selected.
 - Generative image-editing models are not used on production photographs.
 - Human approval is required to change the policy, release a model/prompt
   version or accept a production batch.
-- The pipeline remains usable with the model layer disabled.
+- The pipeline remains usable with the model layer explicitly disabled under
+  an approved operating policy. Record the mode before processing; an outage
+  must never change it automatically. A mode change invalidates dependent
+  repair plans, approvals and outputs before recomputation.
 
 ## Intended capabilities
 
@@ -237,8 +240,14 @@ style release by itself.
 3. Investigate all disagreements.
 4. Enable QA triage first; it has less authority than a pre-repair gate.
 5. Enable the semantic veto only after a separate human release decision.
-6. Roll back automatically to deterministic-only processing if the configured
-   model or schema is unavailable.
+6. If the enabled semantic-veto model or schema is unavailable, mark affected
+   `auto` candidates `uncertain` and queue human review. Preserve earlier vetoes;
+   never switch automatically to deterministic-only processing. If QA triage is
+   unavailable, put affected results in the human queue rather than treating
+   them as model-passed.
+7. Permit deterministic-only processing only through an explicitly approved
+   policy change. Record the new mode and invalidate dependent plans, approvals
+   and outputs before recomputation.
 
 ### Exit test
 

@@ -70,8 +70,12 @@ and darktable composition check are dependencies of production export.
 - `resume` verifies every completed stage before starting new work.
 - `--dry-run` shows proposed stages, capability gaps, expected outputs and human
   gates without decoding or writing production artefacts.
-- Optional ChatGPT unavailability becomes a recorded optional-stage outcome
-  and follows the configured safe fallback.
+- Record the approved AI operating mode before processing. If an enabled
+  semantic veto is unavailable, mark affected candidates `uncertain` and await
+  human review; never mark the veto `skipped_optional` or disable it implicitly.
+  Unavailable QA triage sends affected results to human review. Only an
+  explicitly disabled stage may use `skipped_optional`. A human-approved mode
+  change invalidates dependent plans, approvals and outputs before recomputation.
 - Missing or unverified darktable blocks application/export but still permits
   inventory, detection, planning and evidence generation.
 - Never continue past corrupt output, stale approval, coordinate mismatch or an
@@ -100,8 +104,10 @@ source of truth.
 - Resume tests after interruption before, during and after each stage commit.
 - Tests that mutate one upstream hash and verify the correct dependent stages
   and approvals are invalidated.
-- End-to-end fixture run without ChatGPT, with cached ChatGPT results and with
-  simulated ChatGPT failure.
+- End-to-end fixture run with explicitly disabled ChatGPT, with cached results
+  and with simulated failure of an enabled veto. Prove failure cannot switch
+  modes or clear prior vetoes, and mode changes invalidate dependent artefacts.
+- An unavailable QA-triage fixture routes affected results to human review.
 - End-to-end fixture run with a fake darktable adapter; then a separate
   installation test using the approved real version.
 - Read-only source-tree assertion before and after every integration run.

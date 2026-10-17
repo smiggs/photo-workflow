@@ -100,6 +100,13 @@ AI stage deliberately disabled         -> deterministic result unchanged
 AI stage enabled but result missing     -> uncertain, human review
 ```
 
+Disabled mode must be selected explicitly under an approved operating policy
+and recorded before processing. Model/schema unavailability must never change
+an enabled veto to disabled mode or clear an earlier veto. A mode change creates
+a new policy fingerprint and invalidates dependent plans, approvals and outputs
+before recomputation. Test service failure against both modes and verify that
+an enabled veto leaves affected candidates `uncertain`.
+
 No prompt or model output is allowed to select a new source, change repair
 geometry, write XMP or approve a batch.
 
