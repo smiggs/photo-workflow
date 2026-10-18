@@ -79,3 +79,8 @@ partial support, unavailable inverses and unsupported lens correction.
 A human must review actual camera/orientation evidence and full-resolution
 darktable comparisons before approving the coordinate contract. The current
 report explicitly records `darktable_export_calibration: unverified`.
+
+Scoped human decisions can be imported through the
+[approval-recording interface](approval-recording.md). The current coordinate
+checkpoint exposes this unverified export calibration as a blocker and refuses
+approval; native preview evidence alone cannot satisfy the release gate.

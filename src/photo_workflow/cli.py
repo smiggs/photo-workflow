@@ -17,11 +17,15 @@ from .tools import ToolFailure
 def parser():
     root = argparse.ArgumentParser(prog='photo-pipeline')
     subcommands = root.add_subparsers(dest='command', required=True)
-    for name in ['inventory', 'decode-check', 'inspect-run']:
+    for name in ['inventory', 'decode-check', 'inspect-run', 'review-packet', 'approve']:
         command = subcommands.add_parser(name)
         command.add_argument('input', type=Path)
-        if name != 'inspect-run':
+        if name in {'inventory', 'decode-check'}:
             command.add_argument('--run-dir', required=True, type=Path)
+        if name in {'review-packet', 'approve'}:
+            command.add_argument('checkpoint', choices=['cohort-rules', 'coordinate-contract'])
+        if name == 'approve':
+            command.add_argument('decision_file', type=Path)
         command.add_argument('--config', type=Path)
         command.add_argument('--dry-run', action='store_true')
         command.add_argument('--log-level', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'], default='INFO')
@@ -40,13 +44,25 @@ def main(argv=None):
         elif arguments.command == 'decode-check':
             from .decode import decode_stage
             output = decode_stage(arguments.input, arguments.run_dir, configuration, dry_run=arguments.dry_run)
+        elif arguments.command in {'review-packet', 'approve'}:
+            from .approvals import approve, review_packet
+            manifest = inspect_run(arguments.input)
+            if arguments.config and digest(canonical_bytes(configuration.model_dump(mode='json'))) != manifest.configuration_sha256:
+                raise ValueError('configuration does not match run manifest')
+            if arguments.command == 'review-packet':
+                output = review_packet(arguments.input, arguments.checkpoint, dry_run=arguments.dry_run)
+            else:
+                output = approve(arguments.input, arguments.checkpoint, arguments.decision_file,
+                                 dry_run=arguments.dry_run)
         else:
+            from .approvals import review_status
             manifest = inspect_run(arguments.input)
             if arguments.config and digest(canonical_bytes(configuration.model_dump(mode='json'))) != manifest.configuration_sha256:
                 raise ValueError('configuration does not match run manifest')
             output = {'run_id': manifest.run_id, 'verified': True, 'stages':
                       {name: result.state.value for name, result in manifest.stages.items()},
-                      'approvals': len(manifest.approvals)}
+                      'approvals': len(manifest.approvals),
+                      'review_status': review_status(arguments.input, manifest)}
         code = {'partial': 4, 'failed': 6}.get(output.get('state'), 0)
     except ToolFailure as error:
         output, code = {'error': str(error), 'category': 'missing_tool'}, 3

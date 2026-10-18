@@ -145,7 +145,10 @@ sample decode/calibration evidence. Working setup and test commands are in
 [coordinate-contract.md](../../docs/coordinate-contract.md).
 
 This package is not released. Nonlinear lens and darktable input/export mappings
-remain explicitly unsupported. Real camera fixtures, full-resolution darktable
-calibration, human review of cohort rules/coordinate evidence and approval
-recording through the later orchestration layer remain outstanding. Synthetic
-fixtures and a real ExifTool/rawpy smoke check are engineering evidence only.
+remain explicitly unsupported. The minimal
+[approval-recording interface](../../docs/approval-recording.md) now prepares
+review packets and records immutable, hash-bound human decisions; reviewed
+state is derived separately from historical cohort evidence. Full-resolution
+darktable calibration and the Package 01 human checkpoint remain outstanding.
+See the [validation record](../../docs/package-01-validation.md) for actual
+camera experiments, synthetic evidence and remaining gates.

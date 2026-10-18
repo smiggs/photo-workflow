@@ -45,12 +45,48 @@ class ApprovalRecord(Record):
     input_hashes: Annotated[dict[str, Sha256], Field(min_length=1)]
     reason: Annotated[str, Field(min_length=1)]
 
+    @field_validator('reviewer', 'reason')
+    @classmethod
+    def nonblank_text(cls, value):
+        if not value.strip():
+            raise ValueError('reviewer and reason must contain text')
+        return value
+
     @field_validator('timestamp_utc')
     @classmethod
     def utc_timestamp(cls, value):
         if value.tzinfo is None or value.utcoffset().total_seconds() != 0:
             raise ValueError('timestamp_utc must include UTC offset')
         return value.astimezone(timezone.utc)
+
+
+Checkpoint = Literal['cohort-rules', 'coordinate-contract']
+
+
+class ReviewScope(Record):
+    cohort_rule_version: Literal['1'] = '1'
+    coordinate_contract_version: Literal['1'] = '1'
+    cohort_ids: list[Sha256]
+    coordinate_spaces: list[Literal['raw_sensor', 'active_sensor', 'decoded_detection', 'preview']]
+
+
+class ReviewPacket(Record):
+    run_id: Sha256
+    checkpoint: Checkpoint
+    scope: ReviewScope
+    input_hashes: dict[str, Sha256]
+    evidence_paths: list[str]
+    camera_coverage: list[dict]
+    blockers: list[str]
+    limitations: list[str]
+
+
+class ReviewDecision(ApprovalRecord):
+    checkpoint: Checkpoint
+    run_id: Sha256
+    packet_sha256: Sha256
+    scope: ReviewScope
+    supersedes_sha256: Sha256 | None = None
 
 
 class LensState(Record):
@@ -170,7 +206,7 @@ class RunManifest(Record):
     configuration_sha256: Sha256
     tools: list[ToolVersion]
     stages: dict[str, StageResult] = Field(default_factory=dict)
-    approvals: list[ApprovalRecord] = Field(default_factory=list)
+    approvals: list[ReviewDecision | ApprovalRecord] = Field(default_factory=list)
 
 
 class Inventory(Record):

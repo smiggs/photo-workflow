@@ -7,6 +7,28 @@ initial implementation as a released pipeline. Start with real-camera validation
 and the early darktable capability spike; build the approval-recording path
 alongside them where fixture or tool access is unavailable.
 
+## Follow-on progress: 18 October 2026
+
+The minimal `review-packet` and `approve` commands are implemented, with
+immutable packet-bound decisions, explicit supersession and derived review
+status. The suite now has 70 passing tests; metadata validation, wheel/source
+builds, all 22 packaged schemas and an isolated installed-wheel smoke check
+pass. See [approval recording](../docs/approval-recording.md).
+
+The user authorised Sony α6000 ILCE-6000 raws in the dated September folder for
+landscape and portrait validation. Private copied fixtures, original-file
+hashes, native evidence, control exports and pending review packets are under
+ignored `work/package-01-validation-2026-10-18/`. No human decisions were
+recorded. All 96 original files matched their before/after hashes.
+
+The early darktable 3.8.1 spike produced isolated synthetic and real-camera
+control exports. LibRaw's active width is 6024 pixels; darktable exports 6020
+pixels before orientation. This difference is unresolved. Continue with
+controlled retouch/mask/source-point experiments and measured full-resolution
+geometry, rather than assuming identity or releasing the backend. See the
+[current validation record](../docs/package-01-validation.md) for scope and
+remaining gates. The original starting state below is historical baseline.
+
 ## Read first
 
 - [Repository instructions](../AGENTS.md) and [safety contract](../CLAUDE.md).
@@ -145,28 +167,20 @@ separate from `not-visible`; partial/ambiguous support, unavailable required
 inverses and excessive error must fail closed. Add regression/property fixtures
 and human-readable overlays/difference evidence.
 
-### 4. Add the minimal human-approval recording path
+### 4. Use the minimal human-approval recording path
 
-`ApprovalRecord` and manifest approval fields exist, but no command currently
-records approvals. Cohorts are fixed to `unreviewed`, and decode reports state
-`darktable_export_calibration: unverified`.
+This step's interface is implemented; see
+[approval recording](../docs/approval-recording.md). `review-packet` generates
+scoped, content-addressed evidence and an empty decision template. `approve`
+imports explicit human decisions, validates upstream fingerprints and records
+immutable decisions before publishing the manifest. Corrections must supersede
+the latest decision. `inspect-run` derives checkpoint/cohort review status
+without rewriting historical evidence.
 
-The current status text defers approval recording to Package 06. Resolve that
-dependency: Package 01 needs a small, usable approval path before its own exit
-criteria can pass. Implement the smallest interface consistent with Package 06's
-future `approve` contract, without building the full orchestrator. Update the
-plans, README, models and generated schemas together where necessary.
-
-The tool must present a review packet and accept an explicit human decision,
-reviewer, UTC timestamp, reason and exact inventory/transform/evidence hashes.
-Record cohort-rule and coordinate-contract scope explicitly. Keep decision
-records immutable, with corrections superseding earlier records. Derive reviewed
-state from valid decisions rather than mutating historical evidence or treating
-file presence as approval.
-
-Write tests for approval, rejection, stale packet/transform/input hashes,
-missing decisions and supersession. Changed upstream fingerprints must prevent
-approval reuse. No model or automated test may supply the human decision.
+Current coordinate approval remains blocked by unverified darktable export
+calibration. Keep that blocker until the evidence and supported route are
+implemented and validated. No model or automated test may supply the human
+decision for an actual run. Full orchestration remains Package 06 work.
 
 ### 5. Complete the human checkpoint and release assessment
 

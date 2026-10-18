@@ -53,6 +53,12 @@ and darktable composition check are dependencies of production export.
 
 ## Approval handling
 
+Package 01 provides the minimal `review-packet` and `approve` interfaces for
+cohort rules and coordinate-contract review. See
+[approval recording](../../docs/approval-recording.md). Extend that packet,
+immutable decision and explicit supersession contract when integrating later
+checkpoints; do not replace existing evidence or infer approval from files.
+
 - Generate a checkpoint packet and decision template; never infer approval from
   the presence of a file alone.
 - Validate reviewer decision, packet hash, upstream fingerprints and allowed

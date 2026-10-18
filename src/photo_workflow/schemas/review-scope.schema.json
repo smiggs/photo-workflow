@@ -1,0 +1,50 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "cohort_ids": {
+      "items": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "title": "Cohort Ids",
+      "type": "array"
+    },
+    "cohort_rule_version": {
+      "const": "1",
+      "default": "1",
+      "title": "Cohort Rule Version",
+      "type": "string"
+    },
+    "coordinate_contract_version": {
+      "const": "1",
+      "default": "1",
+      "title": "Coordinate Contract Version",
+      "type": "string"
+    },
+    "coordinate_spaces": {
+      "items": {
+        "enum": [
+          "raw_sensor",
+          "active_sensor",
+          "decoded_detection",
+          "preview"
+        ],
+        "type": "string"
+      },
+      "title": "Coordinate Spaces",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "cohort_ids",
+    "coordinate_spaces"
+  ],
+  "title": "ReviewScope",
+  "type": "object"
+}

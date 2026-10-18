@@ -3,7 +3,8 @@
 Tools and plans for fixed sensor-defect removal and a reusable darktable house
 style. The initial implementation provides raw inventory and decode/calibration
 checks. It does not detect dust, apply repairs, export through darktable or
-approve a camera's coordinate contract.
+qualify a camera's coordinate contract. Explicit human decisions can be recorded
+against review packets; unverified coordinate routes remain blocked.
 
 ## Set up
 
@@ -38,7 +39,8 @@ directory. Dry runs list inputs without decoding, calling external tools or
 creating a run. `decode-check` creates an inventory if needed, then checks the
 configured number of representatives for each cohort/orientation combination.
 `inspect-run` verifies recorded artefact and current source hashes; it does not
-approve a run or re-evaluate current tool compatibility.
+approve a run. When scoped decisions exist, it also checks current tool and
+implementation compatibility to derive their review status.
 
 Source raws and existing sidecars remain read-only. Content-identical files
 share a content-derived frame ID and retain all their source paths. Cohorts
@@ -83,7 +85,7 @@ values; CLI arguments do not silently override configuration fields.
 ```
 
 The other supported setting is `raw_extensions`, an array of filename suffixes.
-Defaults are declared in `src/photo_workflow/config.py`. All three commands
+Defaults are declared in `src/photo_workflow/config.py`. All commands
 support `--config`, `--dry-run`, `--log-level` and `--json`. For `inspect-run`,
 `--dry-run` remains a read-only verification; an explicit configuration must
 match the recorded configuration.
@@ -109,9 +111,12 @@ response. PNG overlays use a separate declared display mapping.
 The implementation supports affine/projective mappings and EXIF orientation.
 Nonlinear lens mappings and mappings to darktable input/final export remain
 unsupported and fail closed. The capability spike must establish those routes;
-synthetic coordinate tests cannot release them. Every cohort remains unreviewed,
-all evidence awaits human approval, and no approval records are fabricated.
-Approval import/orchestration is planned in Package 06.
+synthetic coordinate tests cannot release them. Cohort evidence remains
+immutable and initially unreviewed.
+The [approval-recording interface](docs/approval-recording.md) prepares packets,
+imports explicit human decisions and derives reviewed state from matching
+records. Coordinate approval remains blocked by unverified darktable export
+calibration. Full orchestration belongs to Package 06.
 
 ## Develop and verify
 
@@ -129,9 +134,11 @@ included. Schema tests compare committed JSON Schemas with Pydantic models.
 No numerical coverage gate or lint/type checker has been configured.
 
 The first implementation was verified on Python 3.12.14/Linux, including a
-separate smoke check with ExifTool 12.40 and a synthetic DNG. Hardware-camera
-fixtures, nonlinear calibration, full-resolution darktable comparisons and the
-Package 01 human checkpoint remain outstanding.
+separate smoke check with ExifTool 12.40 and a synthetic DNG. Subsequent
+validation used authorised Sony α6000 ILCE-6000 copies in landscape and portrait. Native decode and isolated darktable control exports succeeded,
+but their active/export widths differ. Full-resolution coordinate calibration,
+backend qualification and the human checkpoint remain outstanding; see the
+[validation record](docs/package-01-validation.md).
 
 ## Workflow specifications
 

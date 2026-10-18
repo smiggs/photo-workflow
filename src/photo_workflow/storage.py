@@ -56,6 +56,9 @@ def inspect_run(run: Path) -> RunManifest:
                 raise ValueError('inventory and manifest configuration disagree')
         if 'decode-check' in manifest.stages:
             DecodeReport.model_validate_json(safe_child(run, 'decode-check.json').read_bytes())
+        if manifest.approvals:
+            from .approvals import validate_records
+            validate_records(run, manifest)
         return manifest
     except OSError as error:
         raise ValueError('run manifest or an artefact is missing/unreadable; do not reuse an interrupted run') from error
